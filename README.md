@@ -1,1 +1,2 @@
 # TodoApp
+Meteor and Bootstrap
