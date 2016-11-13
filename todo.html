@@ -1,0 +1,120 @@
+<head>
+  <title>Todo App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<!-- main template -->
+<template name="main">
+  {{#if currentUser}}
+    {{> listpage}}
+  {{else}}
+    {{> home}}
+  {{/if}}
+</template>
+
+<!-- home template -->
+<template name="home">
+  {{#if currentUser}}
+    {{> listpage}}
+  {{else}}
+    <div class="container homestyle">
+      <div class="row text-center">
+        <div class="col-xs-12">
+          <h2>Todo App</h2>
+          <p><q><em>Welcome to Todo App for insert or remove your own Todos.</em></q></p>
+          <p>Please {{> loginButtons}}</p>
+          <button class="btn btn-success">Enter</button>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+</template>
+
+<!-- navbar template -->
+<template name="navbar">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <p class="navbar-brand">Todo App - <span class="rightAlign">User( {{> loginButtons align="right"}} )</span></p>
+  </nav>
+</template>
+
+<!-- listpage template -->
+<template name="listpage">
+  {{#if currentUser}}
+    {{> navbar}}
+    <div class="container listpagestyle">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <form class="new-list">
+            <input type="text" name="title" placeholder="New List..." />
+            <input type="submit" value="OK" class="submit" />
+          </form>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        {{> lists}}
+      </div>
+    </div>
+  {{else}}
+    {{> home}}
+  {{/if}}
+</template>
+
+<!-- lists template -->
+<template name="lists">
+    {{#each list}}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h1 class="panel-title h1-style-border">
+              {{#if checked}}
+                <span class="glyphicon glyphicon-globe"></span>
+              {{/if}}
+              <a class="listname" href="{{pathFor route='listpage'}}"> {{listname}} </a>
+              {{#if isOwner}}
+                <span class="deletelist">x</span>
+              {{/if}}
+            </h1>
+            {{#if isOwner}}
+              <input type="checkbox" checked="{{checked}}" class="toggle-private" /> Public
+            {{/if}}
+            {{> totalCount}}
+          </div> <!-- End of panel-heading -->
+          <div class="panel-body">
+              {{> task}}
+          </div>
+        </div>
+      </div>
+    {{/each}}
+</template>
+
+<!-- insert task template -->
+<template name="task">
+  <form class="new-task">
+    <input type="text" name="title" placeholder="New Task..." />
+    <input type="submit" value="OK" class="submit" />
+  </form>
+  <ul>
+    {{#each tasks}}
+      {{> taskList}}
+    {{/each}}
+  </ul>
+</template>
+
+<!-- inser taskList template -->
+<template name="taskList">
+	<li class="{{#if checked}}checked{{/if}}">
+    <form>
+      <input type="checkbox" checked="{{checked}}" class="toggle-checked" id="{{_id}}" /> <span class="text"><strong><label for="{{_id}}" class="text">{{title}}</label>
+        <span class="deleteTask">x</span>
+        <br />{{createdTask}}</strong></span>
+		</form>
+	</li>
+</template>
+
+<template name="totalCount">
+  {{#if totalTodos}}
+  	 <span class="totalCount"><strong>{{totalTodos}} task(s)</strong></span>
+  {{/if}}
+</template>
